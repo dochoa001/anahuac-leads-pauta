@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="description" content="Confronta de los leads de pauta Meta de Anáhuac Posgrados contra HubSpot: coincidencia mes a mes, tendencia semanal y detalle por programa.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231D7F4A'/><path d='M25 52l16 16 34-36' fill='none' stroke='white' stroke-width='12' stroke-linecap='round' stroke-linejoin='round'/></svg>">
+<title>Leads de pauta en HubSpot</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#F4F6F9; --surface:#FFFFFF; --surface-2:#EDF1F6;
+  --ink:#16202B; --ink-2:#4F5D6C; --ink-3:#7E8B99;
+  --line:#DCE3EB; --line-2:#EAEFF4;
+  --meta:#2a78d6; --meta-soft:#BBD3F2; --hs:#eb6834; --hs-soft:#F7CBB8;
+  --good:#1D7F4A; --good-bg:#E4F4EA; --warn:#B4531A; --warn-bg:#FBEBDF;
+  --shadow:0 1px 2px rgba(22,32,43,.06),0 8px 24px -12px rgba(22,32,43,.18);
+  --display:"Sora",ui-sans-serif,system-ui,"Segoe UI",Roboto,sans-serif;
+  --body:"IBM Plex Sans",ui-sans-serif,system-ui,"Segoe UI",Roboto,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0F141B; --surface:#171E27; --surface-2:#1F2833;
+    --ink:#EEF2F6; --ink-2:#A9B5C2; --ink-3:#7B8794;
+    --line:#2A3441; --line-2:#222C38;
+    --meta:#3987e5; --meta-soft:#2D4E78; --hs:#d95926; --hs-soft:#6B3A26;
+    --good:#4CC080; --good-bg:#15301F; --warn:#F09A62; --warn-bg:#3A2415;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px -14px rgba(0,0,0,.6);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0F141B; --surface:#171E27; --surface-2:#1F2833;
+  --ink:#EEF2F6; --ink-2:#A9B5C2; --ink-3:#7B8794;
+  --line:#2A3441; --line-2:#222C38;
+  --meta:#3987e5; --meta-soft:#2D4E78; --hs:#d95926; --hs-soft:#6B3A26;
+  --good:#4CC080; --good-bg:#15301F; --warn:#F09A62; --warn-bg:#3A2415;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px -14px rgba(0,0,0,.6);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1040px;margin:0 auto;padding:40px 24px 56px}
+@media (max-width:640px){.wrap{padding:24px 16px 40px}}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;letter-spacing:-.01em}
+h1{font-size:clamp(26px,3.6vw,38px);font-weight:700;line-height:1.15}
+h2{font-size:21px;font-weight:600;line-height:1.25}
+h3{font-size:16px;font-weight:600}
+p{margin:0}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.lede{color:var(--ink-2);max-width:62ch;font-size:16px}
+header{display:grid;gap:14px;margin-bottom:28px}
+.meta-line{display:flex;flex-wrap:wrap;gap:8px 18px;color:var(--ink-3);font-size:13px}
+.meta-line b{color:var(--ink-2);font-weight:500}
+
+.verdict{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center;background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--good);border-radius:14px;padding:22px 24px;box-shadow:var(--shadow);margin-bottom:22px}
+.verdict .check{width:52px;height:52px;border-radius:50%;background:var(--good-bg);color:var(--good);display:grid;place-items:center}
+.verdict .big{font-family:var(--display);font-size:clamp(22px,3vw,30px);font-weight:700;line-height:1.2}
+.verdict .big em{font-style:normal;color:var(--good)}
+.verdict p{color:var(--ink-2);margin-top:6px;max-width:70ch}
+@media (max-width:560px){.verdict{grid-template-columns:1fr}.verdict .check{display:none}}
+
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:34px}
+@media (max-width:900px){.tiles{grid-template-columns:repeat(2,1fr)}}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 18px 16px;display:grid;gap:6px;align-content:start}
+.tile .lbl{font-size:12.5px;color:var(--ink-3);font-weight:500;letter-spacing:.02em}
+.tile .num{font-family:var(--display);font-size:30px;font-weight:600;line-height:1.1;font-variant-numeric:tabular-nums}
+.tile .num small{font-size:15px;font-weight:500;color:var(--ink-2);margin-left:4px}
+.tile .sub{font-size:12.5px;color:var(--ink-2);line-height:1.4}
+.tile.hs .num{color:var(--good)}
+
+section.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:24px;margin-bottom:22px}
+@media (max-width:640px){section.card{padding:18px 16px}}
+.sec-head{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px 20px;align-items:flex-start;margin-bottom:6px}
+.sec-head .txt{display:grid;gap:6px;max-width:64ch}
+.sec-head p{color:var(--ink-2);font-size:14.5px}
+
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:14px 0 6px}
+.controls .grp{display:flex;flex-wrap:wrap;gap:6px}
+.controls .sep{width:1px;height:22px;background:var(--line);margin:0 6px}
+.chip{appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);font:inherit;font-size:13px;font-weight:500;padding:6px 12px;border-radius:999px;cursor:pointer;line-height:1.2}
+.chip:hover{border-color:var(--ink-3)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.chip:focus-visible,.legend button:focus-visible{outline:2px solid var(--meta);outline-offset:2px}
+.hint{font-size:12.5px;color:var(--ink-3)}
+
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--ink-2);margin:6px 0 4px}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.sw{width:12px;height:12px;border-radius:3px;display:inline-block}
+.sw.line{height:3px;border-radius:2px;width:18px}
+
+.chart{position:relative;width:100%}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.chart text{font-family:var(--body);fill:var(--ink-2)}
+.chart .axis line,.chart .grid line{stroke:var(--line-2)}
+.chart .axis .base{stroke:var(--line)}
+.chart .tick{font-size:11.5px;fill:var(--ink-3)}
+.chart .val{font-size:12px;font-weight:600;fill:var(--ink)}
+.chart .val.soft{font-weight:500;fill:var(--ink-2)}
+.chart .hit{fill:transparent;cursor:crosshair}
+.chart .bar-meta{fill:var(--meta)}
+.chart .bar-hs{fill:var(--hs)}
+.chart .bar-day{fill:var(--meta-soft)}
+.chart .bar-day.hi{fill:var(--meta)}
+.chart .avg{fill:none;stroke:var(--ink);stroke-width:2.2;stroke-linejoin:round;stroke-linecap:round}
+.chart .cross{stroke:var(--ink-3);stroke-dasharray:3 3}
+.chart .zero{font-size:11px;fill:var(--warn);font-weight:600}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--surface);font-size:12.5px;line-height:1.4;padding:8px 10px;border-radius:8px;box-shadow:var(--shadow);opacity:0;transform:translate(-50%,-100%);transition:opacity .12s;white-space:nowrap;z-index:2}
+.tip b{font-weight:600}
+.tip .row{display:flex;justify-content:space-between;gap:14px}
+.tip .k{opacity:.8}
+
+.pair-note{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:10px;font-size:13px;color:var(--ink-2)}
+.pair-note span{display:inline-flex;align-items:center;gap:6px}
+.okdot{width:8px;height:8px;border-radius:50%;background:var(--good);display:inline-block}
+
+.explain{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px}
+@media (max-width:820px){.explain{grid-template-columns:1fr}}
+.ex{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;display:grid;gap:8px;align-content:start}
+.ex .ico{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;background:var(--surface-2);color:var(--ink-2)}
+.ex.good .ico{background:var(--good-bg);color:var(--good)}
+.ex.warn .ico{background:var(--warn-bg);color:var(--warn)}
+.ex p{color:var(--ink-2);font-size:14px}
+
+details.tbl{margin-top:16px;border-top:1px solid var(--line-2);padding-top:12px}
+details.tbl summary{cursor:pointer;font-size:13.5px;font-weight:500;color:var(--ink-2);list-style:none;display:inline-flex;align-items:center;gap:8px}
+details.tbl summary::-webkit-details-marker{display:none}
+details.tbl summary::before{content:"";width:7px;height:7px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(-45deg);transition:transform .15s}
+details.tbl[open] summary::before{transform:rotate(45deg)}
+.tblwrap{overflow-x:auto;margin-top:10px}
+table{border-collapse:collapse;width:100%;font-size:13.5px;font-variant-numeric:tabular-nums}
+th,td{text-align:right;padding:8px 10px;border-bottom:1px solid var(--line-2);white-space:nowrap}
+th{font-weight:600;color:var(--ink-2);font-size:12.5px;letter-spacing:.02em}
+th:first-child,td:first-child{text-align:left}
+td.ok{color:var(--good);font-weight:600}
+tfoot td{font-weight:600;border-top:1px solid var(--line)}
+
+footer{color:var(--ink-3);font-size:12.5px;line-height:1.6;display:grid;gap:4px;margin-top:8px;max-width:78ch}
+footer b{color:var(--ink-2);font-weight:500}
+
+.filterbar{position:sticky;top:0;z-index:5;display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin:-6px 0 22px;box-shadow:var(--shadow)}
+.filterbar .lbl{font-size:12.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.filterbar select{appearance:none;-webkit-appearance:none;font:inherit;font-size:14px;font-weight:500;color:var(--ink);background:var(--surface-2) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' fill='none' stroke='%237E8B99' stroke-width='1.8' stroke-linecap='round'/></svg>") no-repeat right 12px center;border:1px solid var(--line);border-radius:9px;padding:8px 34px 8px 12px;cursor:pointer;min-width:260px;max-width:100%}
+.filterbar select:focus-visible{outline:2px solid var(--meta);outline-offset:2px}
+.filterbar .grp{display:flex;flex-wrap:wrap;gap:6px}
+.filterbar .viewing{margin-left:auto;font-size:13px;color:var(--ink-2)}
+.filterbar .viewing b{font-weight:600;color:var(--ink)}
+@media (max-width:720px){.filterbar .viewing{margin-left:0;width:100%}.filterbar select{min-width:0;flex:1}}
+.multis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:14px}
+@media (max-width:980px){.multis{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:640px){.multis{grid-template-columns:repeat(2,1fr)}}
+.multi{appearance:none;text-align:left;font:inherit;color:inherit;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 12px 10px;display:grid;gap:4px;cursor:pointer;transition:border-color .12s,box-shadow .12s}
+.multi:hover{border-color:var(--ink-3)}
+.multi[aria-pressed="true"]{border-color:var(--meta);box-shadow:0 0 0 2px color-mix(in srgb,var(--meta) 30%,transparent)}
+.multi:focus-visible{outline:2px solid var(--meta);outline-offset:2px}
+.multi .code{font-family:var(--display);font-weight:600;font-size:15px}
+.multi .name{font-size:11.5px;color:var(--ink-3);line-height:1.3;min-height:2.6em}
+.multi .nums{display:flex;justify-content:space-between;align-items:baseline;gap:6px;font-size:12px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.multi .nums b{font-family:var(--display);font-size:20px;color:var(--ink);font-weight:600}
+.multi .chg{font-size:11.5px;font-weight:600}
+.multi .chg.down{color:var(--warn)}
+.multi .chg.up{color:var(--good)}
+.multi svg{display:block;width:100%;height:46px;margin-top:4px}
+.multi .mbar{fill:var(--meta-soft)}
+.multi .mbar.peak{fill:var(--meta)}
+.multi .mbar.last{fill:var(--hs)}
+.multi .mbar.partial{opacity:.45}
+td.hl,th.hl{background:var(--surface-2)}
+.tbl-note{font-size:12.5px;color:var(--ink-3);margin-top:8px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+<style>img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+
+
+<div class="wrap">
+<header>
+  <div class="eyebrow">Anáhuac Posgrados · Pauta en Meta → HubSpot</div>
+  <h1>¿Los leads de pauta están llegando a HubSpot?</h1>
+  <p class="lede">Se tomó la base completa de leads que entrega Meta para los cinco programas con pauta activa y se buscó cada uno, por correo, dentro de HubSpot. Aquí se ve qué tanto coinciden y cómo se ha movido el volumen en el tiempo.</p>
+  <div class="meta-line">
+    <span>Periodo: <b>1 jun – 8 sep 2026</b></span>
+    <span>Programas: <b>DII · MIGE · ML · MTSD · MTIIA</b></span>
+    <span>Corte: <b>8 sep 2026, 14:40 h</b></span>
+  </div>
+</header>
+
+
+<div class="filterbar" role="region" aria-label="Filtro por programa">
+  <span class="lbl">Programa</span>
+  <select id="prog-select" aria-label="Elegir programa"></select>
+  <div class="grp" id="prog-chips"></div>
+  <span class="viewing" id="viewing"></span>
+</div>
+
+<div class="verdict" role="status">
+  <div class="check" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.5l4.5 4.5L19.5 6.5"/></svg></div>
+  <div>
+    <div class="big" id="verdict-big">Sí. <em>1,614 de 1,614</em> leads con datos están en HubSpot.</div>
+    <p>Ningún lead de la base de Meta se quedó fuera. Cada uno se creó en HubSpot en el mismo segundo en que Meta lo registró, o bien se sumó al contacto que ya existía, sin duplicarlo.</p>
+  </div>
+</div>
+
+<div class="tiles">
+  <div class="tile">
+    <div class="lbl">Leads en la base de Meta</div>
+    <div class="num" id="t-meta">1,614</div>
+    <div class="sub">Con correo y fecha. Otros <b id="t-sin">55</b> registros de DII llegaron de Meta vacíos (sin nombre ni correo) y no se pueden buscar.</div>
+  </div>
+  <div class="tile hs">
+    <div class="lbl">Encontrados en HubSpot</div>
+    <div class="num" id="t-hs">1,614<small>100 %</small></div>
+    <div class="sub">Buscados uno a uno por correo electrónico.</div>
+  </div>
+  <div class="tile">
+    <div class="lbl">Tiempo de llegada</div>
+    <div class="num">0 <small>segundos</small></div>
+    <div class="sub">La hora de creación en HubSpot coincide con la de Meta al segundo, en todos los casos.</div>
+  </div>
+  <div class="tile">
+    <div class="lbl">Ya eran contactos</div>
+    <div class="num" id="t-pre">169</div>
+    <div class="sub">Personas que ya estaban en HubSpot; su registro se actualizó con el nuevo interés en lugar de crear un duplicado.</div>
+  </div>
+</div>
+
+<section class="card" aria-labelledby="h-mes">
+  <div class="sec-head">
+    <div class="txt">
+      <h2 id="h-mes">Mes a mes, los números coinciden</h2>
+      <p>Lo que Meta reporta y lo que existe en HubSpot, lado a lado. Al pasar el cursor sobre un mes se ve el detalle.</p>
+    </div>
+  </div>
+  <div class="legend"><span><i class="sw" style="background:var(--meta)"></i>Leads en Meta</span><span><i class="sw" style="background:var(--hs)"></i>En HubSpot</span></div>
+  <div class="chart" id="chart-mes"></div>
+  <div class="pair-note" id="pair-note"></div>
+  <details class="tbl">
+    <summary>Ver la tabla con los números</summary>
+    <div class="tblwrap"><table id="tbl-mes"></table></div>
+  </details>
+</section>
+
+<section class="card" aria-labelledby="h-tend">
+  <div class="sec-head">
+    <div class="txt">
+      <h2 id="h-tend">Lo que sí ha cambiado: el volumen que genera la pauta</h2>
+      <p>Esta es la cantidad de leads que Meta produjo cada semana. Es la misma curva en HubSpot, porque todo llegó; la baja de las últimas semanas nace en la pauta, antes de HubSpot.</p>
+    </div>
+  </div>
+  <div class="controls">
+    <span class="hint">Ver:</span>
+    <div class="grp" id="gran-chips">
+      <button class="chip" data-gran="sem" aria-pressed="true">Por semana</button>
+      <button class="chip" data-gran="dia" aria-pressed="false">Por día</button>
+    </div>
+    <span class="sep"></span>
+    <span class="hint" id="filter-echo"></span>
+  </div>
+  <div class="legend" id="legend-tend"></div>
+  <div class="chart" id="chart-tend"></div>
+  <p class="hint" id="tend-note" style="margin-top:8px"></p>
+  <details class="tbl">
+    <summary>Ver el detalle por semana y programa</summary>
+    <div class="tblwrap"><table id="tbl-sem"></table></div>
+    <p class="tbl-note">Cada celda es la cantidad de leads que Meta generó esa semana para ese programa; todos ellos están en HubSpot. La columna del programa elegido arriba aparece resaltada.</p>
+  </details>
+</section>
+
+<section class="card" aria-labelledby="h-prog">
+  <div class="sec-head">
+    <div class="txt">
+      <h2 id="h-prog">Detalle por programa</h2>
+      <p>Cómo se ha movido cada programa semana a semana. Para ver uno a fondo, das clic en su tarjeta y toda la página se ajusta a ese programa.</p>
+    </div>
+  </div>
+  <div class="multis" id="multis"></div>
+  <details class="tbl">
+    <summary>Ver la tabla por programa</summary>
+    <div class="tblwrap"><table id="tbl-prog"></table></div>
+  </details>
+</section>
+
+<div class="explain">
+  <div class="ex good">
+    <div class="ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.5 1.5"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.5-1.5"/></svg></div>
+    <h3>La conexión funciona</h3>
+    <p>Meta y HubSpot están conectados de forma directa. Cuando alguien llena el formulario en Facebook o Instagram, HubSpot crea el contacto en ese mismo instante, con el nombre del programa como fuente.</p>
+  </div>
+  <div class="ex good">
+    <div class="ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+    <h3>Nada se perdió en el camino</h3>
+    <p>De junio a la fecha, los 1,614 leads con datos están en HubSpot. Cuando el interesado ya era contacto, HubSpot sumó el nuevo interés a su registro, por eso a veces no aparece como “contacto nuevo” aunque sí llegó.</p>
+  </div>
+  <div class="ex warn">
+    <div class="ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg></div>
+    <h3>La baja viene de antes de HubSpot</h3>
+    <p>La cantidad de leads que la pauta genera tocó su punto más alto a finales de julio y desde entonces ha ido bajando. Ese comportamiento se ve igual en Meta y en HubSpot, así que la respuesta está en la pauta: entrega, presupuesto, creatividades o audiencias.</p>
+  </div>
+</div>
+
+<footer>
+  <p><b>Fuente:</b> base “ANAHUAC POSGRADO - REPOSITORIO - 2026” (exportación de Meta Lead Ads, 1,669 registros) y el portal de HubSpot de Anáhuac Posgrados, consultado por API el 8 de septiembre de 2026. Cada lead se buscó por correo, incluyendo correos secundarios.</p>
+  <p>Las fechas están en hora del centro de México. La semana del 7 de septiembre está en curso. Elaborado por Black &amp; Orange.</p>
+</footer>
+</div>
+
+<script>
+const DATA = {"start":"2026-06-01","end":"2026-09-08","progs":["DII","MIGE","ML","MTSD","MTIIA"],"meta":{"DII":[0,1,5,4,4,3,2,4,1,0,3,1,0,1,1,0,1,1,0,1,0,3,2,0,0,0,2,2,2,1,1,2,2,1,2,0,1,1,16,4,12,5,4,13,6,4,5,0,0,0,0,0,0,0,0,0,7,5,5,9,5,4,5,0,3,3,1,1,3,1,0,6,4,4,3,4,3,2,1,4,2,0,2,2,2,5,0,3,5,1,3,2,2,2,6,1,0,0,4,3],"MIGE":[0,0,3,2,1,0,1,0,3,2,0,1,2,0,1,0,2,0,2,0,1,1,2,0,1,1,1,1,0,1,1,2,3,1,3,3,4,4,4,3,1,2,3,4,4,3,7,4,2,3,10,3,4,6,3,7,8,4,1,1,0,5,1,1,2,1,4,2,1,6,4,5,3,4,5,1,2,1,2,2,3,4,4,3,4,4,3,2,1,3,3,7,4,5,4,2,0,0,0,6],"ML":[2,10,9,9,6,3,7,9,3,8,6,5,11,3,2,5,5,4,5,4,8,3,1,3,1,4,3,3,3,5,4,4,5,2,0,1,5,6,7,4,2,4,4,0,2,7,5,2,3,5,4,5,4,2,4,6,2,9,0,7,6,6,5,1,4,3,4,4,2,7,4,3,4,4,3,4,3,3,3,4,3,1,2,3,4,3,0,2,4,2,2,4,5,2,5,1,0,0,8,1],"MTSD":[0,1,1,1,1,2,1,0,0,0,0,2,0,0,1,0,2,0,0,0,0,1,5,1,2,0,2,3,4,2,2,6,7,4,1,5,3,5,8,5,3,1,1,1,0,3,2,3,4,2,4,1,3,2,4,8,2,1,1,3,2,4,3,3,5,4,3,1,2,3,1,0,3,3,0,4,3,1,4,3,3,3,1,6,1,4,2,2,3,1,5,3,5,1,2,1,0,0,3,2],"MTIIA":[0,0,1,4,3,1,1,1,0,0,1,1,0,0,0,1,1,0,0,1,0,1,3,3,3,4,2,0,1,3,2,9,3,0,1,2,2,0,3,9,5,6,7,6,2,4,14,1,2,4,4,2,13,10,8,7,10,7,11,11,9,12,17,9,9,10,9,14,10,7,12,4,7,5,6,6,9,16,1,8,6,6,7,8,5,7,4,9,6,2,15,6,6,4,9,4,0,0,5,0]},"pre":{"DII":[0,0,0,1,1,0,0,1,0,0,1,1,0,1,0,0,0,0,0,1,0,2,0,0,0,0,0,0,1,1,1,0,1,0,1,0,0,0,5,0,2,1,1,0,1,1,1,0,0,0,0,0,0,0,0,0,2,1,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,2,0,0,0,0,0,1,0,0,0,0,0,0,0,0],"MIGE":[0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,2,1,0,1,1,0,0,0,1,0,0,0,1,0,1,1,1,2,0,0,0,0,0,1,0,0,0,0,1,1,0,1,1,1,1,0,1,1,0,0,0,1,2,1,0,0,0,1,0,0,0,0,0,2,1,0,0,0,0,0,0,2],"ML":[0,3,0,0,0,0,0,0,1,0,1,0,1,0,0,0,1,0,0,1,1,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,0,0,1,0,1,0,0,0,0,2,0,1,0,1,0,0,0,1,1,0,0,0,0,0,0,3,0,0,1,0,0,0,0,0,0,0,0,0,0,1,2,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0],"MTSD":[0,0,0,0,1,1,0,0,0,0,0,2,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,1,0,0,1,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,2,0,0,0,1,0,0,1,0,0,0,1,1,0,0,0,0,0,0,1,0],"MTIIA":[0,0,1,2,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,2,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,3,1,2,0,2,0,1,2,0,0,0,0,1,4,1,0,1,1,0,2,0,2,1,1,0,3,0,0,1,1,0,0,0,1,0,2,0,0,0,0,0,0,1,0,1,1,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0]},"sin_datos":55};
+const PROG_NAMES = {DII:'Doctorado en Ingeniería Industrial', MIGE:'Maestría en Ingeniería de Gestión Empresarial', ML:'Maestría en Logística', MTSD:'Maestría en Tecnologías para el Desarrollo Sustentable', MTIIA:'Maestría en TI e Inteligencia Analítica'};
+const MES = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+const MES_L = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+const fmt = n => n.toLocaleString('es-MX');
+
+// ---- dates
+const start = new Date(DATA.start + 'T12:00:00');
+const N = DATA.meta[DATA.progs[0]].length;
+const dates = Array.from({length:N}, (_,i)=>{ const d=new Date(start); d.setDate(d.getDate()+i); return d; });
+const iso = d => d.toISOString().slice(0,10);
+const lastDay = dates[N-1];
+
+// ---- state
+let sel = 'ALL';           // program filter
+let gran = 'sem';          // sem | dia
+
+function series(){
+  const progs = sel==='ALL' ? DATA.progs : [sel];
+  const meta = new Array(N).fill(0), pre = new Array(N).fill(0);
+  progs.forEach(p=>{ for(let i=0;i<N;i++){ meta[i]+=DATA.meta[p][i]; pre[i]+=DATA.pre[p][i]; } });
+  return {meta, pre};
+}
+
+// ---- program filter (select + chips), applies to the whole page
+const chipsEl = document.getElementById('prog-chips');
+const selectEl = document.getElementById('prog-select');
+const OPTS = [['ALL','Todos los programas'], ...DATA.progs.map(p=>[p, p+' · '+PROG_NAMES[p]])];
+OPTS.forEach(([k,label])=>{ const o=document.createElement('option'); o.value=k; o.textContent=label; selectEl.appendChild(o); });
+[['ALL','Todos'], ...DATA.progs.map(p=>[p,p])].forEach(([k,label])=>{
+  const b=document.createElement('button'); b.className='chip'; b.textContent=label; b.dataset.prog=k; b.type='button';
+  if(k!=='ALL') b.title = PROG_NAMES[k];
+  b.addEventListener('click',()=>setProg(k));
+  chipsEl.appendChild(b);
+});
+selectEl.addEventListener('change',()=>setProg(selectEl.value));
+function setProg(k){ sel=k; syncFilterUI(); renderAll(); }
+function syncFilterUI(){
+  selectEl.value=sel;
+  chipsEl.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed', c.dataset.prog===sel?'true':'false'));
+  document.getElementById('viewing').innerHTML = sel==='ALL' ? 'Viendo: <b>los cinco programas</b>' : 'Viendo: <b>'+PROG_NAMES[sel]+'</b>';
+  document.querySelectorAll('.multi').forEach(m=>m.setAttribute('aria-pressed', m.dataset.prog===sel?'true':'false'));
+}
+document.querySelectorAll('#gran-chips .chip').forEach(b=>b.addEventListener('click',()=>{
+  gran=b.dataset.gran; document.querySelectorAll('#gran-chips .chip').forEach(c=>c.setAttribute('aria-pressed', c.dataset.gran===gran?'true':'false')); renderTend();
+}));
+
+// ---- tooltip helper
+function tooltip(container){
+  let tip = container.querySelector('.tip');
+  if(!tip){ tip=document.createElement('div'); tip.className='tip'; container.appendChild(tip); }
+  return {
+    show(html, x, y){ tip.innerHTML=html; tip.style.left=x+'px'; tip.style.top=(y-10)+'px'; tip.style.opacity=1; },
+    hide(){ tip.style.opacity=0; }
+  };
+}
+function niceScale(max){ const cands=[1,2,5,10,20,25,50,100,200,250,500,1000]; for(const st of cands){ const n=Math.ceil(max*1.12/st); if(n>=3&&n<=6) return {yMax:n*st, steps:n}; } return {yMax:Math.ceil(max*1.12), steps:4}; }
+function svgEl(tag, attrs){ const e=document.createElementNS('http://www.w3.org/2000/svg',tag); for(const k in attrs) e.setAttribute(k,attrs[k]); return e; }
+
+// ---- monthly chart
+function renderMes(){
+  const {meta, pre} = series();
+  const months = {};
+  dates.forEach((d,i)=>{ const k=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'); if(!months[k]) months[k]={meta:0,pre:0,m:d.getMonth(),partial:false}; months[k].meta+=meta[i]; months[k].pre+=pre[i]; });
+  const keys = Object.keys(months).sort();
+  months[keys[keys.length-1]].partial = true;
+  const rows = keys.map(k=>({k, ...months[k], hs: months[k].meta}));
+
+  const W=960, H=300, padL=14, padR=14, padT=34, padB=44;
+  const innerW=W-padL-padR, innerH=H-padT-padB;
+  const max = Math.max(1, ...rows.map(r=>r.meta));
+  const {yMax, steps} = niceScale(max);
+  const groupW = innerW/rows.length, barW = Math.min(64, groupW*0.28), gap=6;
+  const y = v => padT + innerH - (v/yMax)*innerH;
+
+  const svg = svgEl('svg',{viewBox:`0 0 ${W} ${H}`, role:'img','aria-label':'Leads por mes: Meta y HubSpot coinciden'});
+  const grid = svgEl('g',{class:'grid'});
+  for(let s=0;s<=steps;s++){ const v=yMax*s/steps; grid.appendChild(svgEl('line',{x1:padL,x2:W-padR,y1:y(v),y2:y(v)})); const t=svgEl('text',{x:padL,y:y(v)-4,class:'tick'}); t.textContent=fmt(Math.round(v)); grid.appendChild(t); }
+  svg.appendChild(grid);
+  const axis = svgEl('g',{class:'axis'}); axis.appendChild(svgEl('line',{class:'base',x1:padL,x2:W-padR,y1:y(0),y2:y(0)})); svg.appendChild(axis);
+
+  const container=document.getElementById('chart-mes'); container.innerHTML=''; container.appendChild(svg);
+  const tip = tooltip(container);
+
+  rows.forEach((r,i)=>{
+    const cx = padL + groupW*i + groupW/2;
+    const x1 = cx - barW - gap/2, x2 = cx + gap/2;
+    const g = svgEl('g',{});
+    const rectMeta = svgEl('rect',{class:'bar-meta',x:x1,width:barW,y:y(r.meta),height:Math.max(0,y(0)-y(r.meta)),rx:4});
+    const rectHs = svgEl('rect',{class:'bar-hs',x:x2,width:barW,y:y(r.hs),height:Math.max(0,y(0)-y(r.hs)),rx:4});
+    // square the bottom corners visually by overlaying a small rect at the baseline
+    g.appendChild(rectMeta); g.appendChild(rectHs);
+    if(r.meta>0){
+      g.appendChild(svgEl('rect',{class:'bar-meta',x:x1,width:barW,y:y(0)-4,height:4}));
+      g.appendChild(svgEl('rect',{class:'bar-hs',x:x2,width:barW,y:y(0)-4,height:4}));
+    }
+    const v1=svgEl('text',{x:x1+barW/2,y:y(r.meta)-7,class:'val','text-anchor':'middle'}); v1.textContent=fmt(r.meta);
+    const v2=svgEl('text',{x:x2+barW/2,y:y(r.hs)-7,class:'val','text-anchor':'middle'}); v2.textContent=fmt(r.hs);
+    g.appendChild(v1); g.appendChild(v2);
+    const lab=svgEl('text',{x:cx,y:H-22,class:'tick','text-anchor':'middle'}); lab.textContent=MES_L[r.m]+(r.partial?' (1–'+lastDay.getDate()+')':''); lab.style.fontSize='13px'; lab.style.fill='var(--ink-2)'; g.appendChild(lab);
+    const ok=svgEl('text',{x:cx,y:H-6,class:'tick','text-anchor':'middle'}); ok.textContent = r.meta? '✓ 100 % en HubSpot' : 'sin leads'; ok.style.fill = r.meta ? 'var(--good)' : 'var(--ink-3)'; ok.style.fontWeight='600'; g.appendChild(ok);
+    const hit=svgEl('rect',{class:'hit',x:padL+groupW*i,y:padT-20,width:groupW,height:innerH+20});
+    hit.addEventListener('mousemove',ev=>{
+      const b=container.getBoundingClientRect();
+      tip.show(`<b>${MES_L[r.m].charAt(0).toUpperCase()+MES_L[r.m].slice(1)}${r.partial?' (en curso)':''}</b>
+        <div class="row"><span class="k">Leads en Meta</span><b>${fmt(r.meta)}</b></div>
+        <div class="row"><span class="k">En HubSpot</span><b>${fmt(r.hs)} · 100 %</b></div>
+        <div class="row"><span class="k">Contactos nuevos</span><span>${fmt(r.meta-r.pre)}</span></div>
+        <div class="row"><span class="k">Ya eran contactos</span><span>${fmt(r.pre)}</span></div>`, ev.clientX-b.left, ev.clientY-b.top);
+    });
+    hit.addEventListener('mouseleave',()=>tip.hide());
+    g.appendChild(hit);
+    svg.appendChild(g);
+  });
+
+  const tot = rows.reduce((a,r)=>({meta:a.meta+r.meta,pre:a.pre+r.pre}),{meta:0,pre:0});
+  document.getElementById('pair-note').innerHTML = `<span><i class="okdot"></i>${fmt(tot.meta)} leads en Meta → ${fmt(tot.meta)} en HubSpot</span><span>${fmt(tot.meta-tot.pre)} se crearon como contactos nuevos</span><span>${fmt(tot.pre)} ya eran contactos y se actualizaron</span>`;
+
+  // table
+  const tbl=document.getElementById('tbl-mes');
+  tbl.innerHTML = `<thead><tr><th>Mes</th><th>Leads en Meta</th><th>En HubSpot</th><th>Coincidencia</th><th>Contactos nuevos</th><th>Ya eran contactos</th></tr></thead>
+  <tbody>${rows.map(r=>`<tr><td>${MES_L[r.m]}${r.partial?' (1–'+lastDay.getDate()+')':''}</td><td>${fmt(r.meta)}</td><td>${fmt(r.hs)}</td><td class="ok">${r.meta?'100 %':'—'}</td><td>${fmt(r.meta-r.pre)}</td><td>${fmt(r.pre)}</td></tr>`).join('')}</tbody>
+  <tfoot><tr><td>Total</td><td>${fmt(tot.meta)}</td><td>${fmt(tot.meta)}</td><td class="ok">100 %</td><td>${fmt(tot.meta-tot.pre)}</td><td>${fmt(tot.pre)}</td></tr></tfoot>`;
+}
+
+// ---- trend chart
+function weekStart(d){ const x=new Date(d); const wd=(x.getDay()+6)%7; x.setDate(x.getDate()-wd); return x; }
+function fmtDay(d){ return d.getDate()+' '+MES[d.getMonth()]; }
+function renderTend(){
+  const {meta, pre} = series();
+  const container=document.getElementById('chart-tend'); container.innerHTML='';
+  const W=960, H=320, padL=14, padR=14, padT=28, padB=40, innerW=W-padL-padR, innerH=H-padT-padB;
+  const svg=svgEl('svg',{viewBox:`0 0 ${W} ${H}`, role:'img','aria-label':'Tendencia de leads de pauta'});
+  const tip=tooltip(container);
+  const legend=document.getElementById('legend-tend');
+  const note=document.getElementById('tend-note');
+  document.getElementById('filter-echo').textContent = sel==='ALL' ? 'Los cinco programas' : PROG_NAMES[sel];
+
+  let points; // {label, tipLabel, meta, pre, partial}
+  if(gran==='sem'){
+    const map=new Map();
+    dates.forEach((d,i)=>{ const k=iso(weekStart(d)); if(!map.has(k)) map.set(k,{start:weekStart(d),meta:0,pre:0,days:0}); const w=map.get(k); w.meta+=meta[i]; w.pre+=pre[i]; w.days++; });
+    points=[...map.values()].map(w=>{ const end=new Date(w.start); end.setDate(end.getDate()+6); return {label:fmtDay(w.start), tipLabel:`Semana del ${fmtDay(w.start)} al ${fmtDay(end)}`, meta:w.meta, pre:w.pre, partial:w.days<7}; });
+    legend.innerHTML=`<span><i class="sw" style="background:var(--meta)"></i>Leads de pauta por semana (Meta = HubSpot)</span>`;
+    const peak=points.reduce((a,p)=>p.meta>a.meta?p:a,points[0]);
+    const full=points.filter(p=>!p.partial); const last=full[full.length-1];
+    note.textContent=`Punto más alto: ${fmt(peak.meta)} leads la semana del ${peak.label}. Última semana completa (${last.label}): ${fmt(last.meta)}, un ${Math.round((1-last.meta/peak.meta)*100)} % menos. La barra final corresponde a la semana en curso.`;
+  } else {
+    points=dates.map((d,i)=>({label:fmtDay(d), tipLabel:d.toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long'}), meta:meta[i], pre:pre[i], partial:i===N-1}));
+    legend.innerHTML=`<span><i class="sw" style="background:var(--meta-soft)"></i>Leads por día (Meta = HubSpot)</span><span><i class="sw line" style="background:var(--ink)"></i>Promedio de 7 días</span>`;
+    const zeros=points.filter((p,i)=>p.meta===0 && i>=N-10 && !p.partial).map(p=>p.label);
+    note.textContent = zeros.length ? `Días recientes sin leads: ${zeros.join(', ')}. En esos días Meta tampoco registró leads para estos programas; en el resto del portal de HubSpot sí siguieron entrando contactos de otras campañas.` : '';
+  }
+  const max=Math.max(1,...points.map(p=>p.meta));
+  const {yMax, steps} = niceScale(max);
+  const y=v=>padT+innerH-(v/yMax)*innerH;
+  const grid=svgEl('g',{class:'grid'});
+  for(let s=0;s<=steps;s++){ const v=yMax*s/steps; grid.appendChild(svgEl('line',{x1:padL,x2:W-padR,y1:y(v),y2:y(v)})); const t=svgEl('text',{x:padL,y:y(v)-4,class:'tick'}); t.textContent=fmt(Math.round(v)); grid.appendChild(t); }
+  svg.appendChild(grid);
+  svg.appendChild(svgEl('line',{class:'base',x1:padL,x2:W-padR,y1:y(0),y2:y(0),stroke:'var(--line)'}));
+
+  const n=points.length, slot=innerW/n, bw=Math.max(2, slot*(gran==='sem'?0.62:0.72));
+  const marks=[];
+  points.forEach((p,i)=>{
+    const x=padL+slot*i+(slot-bw)/2;
+    const r=svgEl('rect',{class: gran==='sem'?'bar-meta':'bar-day', x, width:bw, y:y(p.meta), height:Math.max(0,y(0)-y(p.meta)), rx: gran==='sem'?4:1.5});
+    if(p.partial) r.style.opacity='.45';
+    svg.appendChild(r); marks.push(r);
+    if(gran==='sem'){
+      const v=svgEl('text',{x:x+bw/2,y:y(p.meta)-7,class:'val'+(p.partial?' soft':''),'text-anchor':'middle'}); v.textContent=fmt(p.meta); svg.appendChild(v);
+      const l=svgEl('text',{x:x+bw/2,y:H-14,class:'tick','text-anchor':'middle'}); l.textContent=p.label; svg.appendChild(l);
+    } else if(p.meta===0 && i>=N-10 && !p.partial){
+      const z=svgEl('text',{x:x+bw/2,y:y(0)-6,class:'zero','text-anchor':'middle'}); z.textContent='0'; svg.appendChild(z);
+    }
+  });
+  if(gran==='dia'){
+    // x labels every Monday
+    dates.forEach((d,i)=>{ if(d.getDay()===1){ const l=svgEl('text',{x:padL+slot*i+slot/2,y:H-14,class:'tick','text-anchor':'middle'}); l.textContent=fmtDay(d); svg.appendChild(l);} });
+    // 7-day average line
+    const pts=[];
+    for(let i=0;i<N;i++){ const a=Math.max(0,i-6); let s=0; for(let j=a;j<=i;j++) s+=meta[j]; const v=s/(i-a+1); pts.push([padL+slot*i+slot/2, y(v)]); }
+    svg.appendChild(svgEl('path',{class:'avg', d: pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ')}));
+  }
+  // hover layer
+  const cross=svgEl('line',{class:'cross',x1:0,x2:0,y1:padT,y2:y(0),style:'opacity:0'}); svg.appendChild(cross);
+  const hit=svgEl('rect',{class:'hit',x:padL,y:padT-10,width:innerW,height:innerH+10}); svg.appendChild(hit);
+  hit.addEventListener('mousemove',ev=>{
+    const b=container.getBoundingClientRect(); const sx=W/b.width;
+    const i=Math.min(n-1,Math.max(0,Math.floor(((ev.clientX-b.left)*sx-padL)/slot)));
+    const p=points[i]; const cx=padL+slot*i+slot/2;
+    cross.setAttribute('x1',cx); cross.setAttribute('x2',cx); cross.style.opacity=1;
+    marks.forEach((m,j)=>m.classList.toggle('hi', j===i && gran==='dia'));
+    tip.show(`<b>${p.tipLabel}${p.partial?' · en curso':''}</b>
+      <div class="row"><span class="k">Leads en Meta</span><b>${fmt(p.meta)}</b></div>
+      <div class="row"><span class="k">Llegaron a HubSpot</span><b>${fmt(p.meta)}${p.meta?' · 100 %':''}</b></div>
+      ${p.pre?`<div class="row"><span class="k">Ya eran contactos</span><span>${fmt(p.pre)}</span></div>`:''}`, cx/sx, (y(p.meta))/sx);
+  });
+  hit.addEventListener('mouseleave',()=>{ tip.hide(); cross.style.opacity=0; marks.forEach(m=>m.classList.remove('hi')); });
+  container.appendChild(svg);
+}
+
+// ---- weekly aggregation per program
+function weeksByProg(){
+  const map=new Map();
+  dates.forEach((d,i)=>{ const k=iso(weekStart(d)); if(!map.has(k)){ const row={start:weekStart(d),days:0,total:0}; DATA.progs.forEach(p=>row[p]=0); map.set(k,row);} const w=map.get(k); w.days++; DATA.progs.forEach(p=>{ w[p]+=DATA.meta[p][i]; w.total+=DATA.meta[p][i]; }); });
+  return [...map.values()];
+}
+function renderDetail(){
+  const weeks=weeksByProg();
+  const full=weeks.filter(w=>w.days===7);
+  // small multiples
+  const box=document.getElementById('multis'); box.innerHTML='';
+  const rowsProg=[];
+  DATA.progs.forEach(p=>{
+    const vals=weeks.map(w=>w[p]); const fullVals=full.map(w=>w[p]);
+    const peakIdx=fullVals.indexOf(Math.max(...fullVals)); const peak=fullVals[peakIdx]; const last=fullVals[fullVals.length-1];
+    const total=DATA.meta[p].reduce((a,b)=>a+b,0), pre=DATA.pre[p].reduce((a,b)=>a+b,0);
+    const chg = peak ? Math.round((last-peak)/peak*100) : 0;
+    rowsProg.push({p,total,pre,peak,peakWeek:full[peakIdx].start,last,lastWeek:full[full.length-1].start,chg});
+    const b=document.createElement('button'); b.className='multi'; b.type='button'; b.dataset.prog=p; b.setAttribute('aria-pressed', sel===p?'true':'false');
+    b.title='Ver solo '+PROG_NAMES[p];
+    const W=200,H=46,n=vals.length,slot=W/n,bw=slot*0.7,max=Math.max(1,...vals);
+    const bars=vals.map((v,i)=>{ const h=Math.max(v?2:0,(v/max)*(H-2)); const cls='mbar'+(i===peakIdx?' peak':'')+(i===full.length-1?' last':'')+(weeks[i].days<7?' partial':''); return `<rect class="${cls}" x="${(slot*i+(slot-bw)/2).toFixed(1)}" y="${(H-h).toFixed(1)}" width="${bw.toFixed(1)}" height="${h.toFixed(1)}" rx="1.5"></rect>`; }).join('');
+    b.innerHTML=`<div class="code">${p}</div><div class="name">${PROG_NAMES[p]}</div>
+      <div class="nums"><span><b>${fmt(total)}</b> leads</span><span class="chg ${chg<0?'down':'up'}">${chg>0?'+':''}${chg} %</span></div>
+      <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true">${bars}</svg>
+      <div class="nums" style="font-size:11.5px"><span>Pico ${fmt(peak)}</span><span>Últ. sem. ${fmt(last)}</span></div>`;
+    b.addEventListener('click',()=>setProg(sel===p?'ALL':p));
+    box.appendChild(b);
+  });
+  // per-program table
+  const tp=document.getElementById('tbl-prog');
+  const tot=rowsProg.reduce((a,r)=>({total:a.total+r.total,pre:a.pre+r.pre}),{total:0,pre:0});
+  tp.innerHTML=`<thead><tr><th>Programa</th><th>Leads en Meta</th><th>En HubSpot</th><th>Coincidencia</th><th>Contactos nuevos</th><th>Ya eran contactos</th><th>Semana pico</th><th>Última semana completa</th><th>Cambio</th></tr></thead>
+  <tbody>${rowsProg.map(r=>`<tr class="${sel===r.p?'hl':''}"><td><b>${r.p}</b> · ${PROG_NAMES[r.p]}</td><td>${fmt(r.total)}</td><td>${fmt(r.total)}</td><td class="ok">100 %</td><td>${fmt(r.total-r.pre)}</td><td>${fmt(r.pre)}</td><td>${fmt(r.peak)} <span class="hint">(${fmtDay(r.peakWeek)})</span></td><td>${fmt(r.last)} <span class="hint">(${fmtDay(r.lastWeek)})</span></td><td style="color:${r.chg<0?'var(--warn)':'var(--good)'};font-weight:600">${r.chg>0?'+':''}${r.chg} %</td></tr>`).join('')}</tbody>
+  <tfoot><tr><td>Total</td><td>${fmt(tot.total)}</td><td>${fmt(tot.total)}</td><td class="ok">100 %</td><td>${fmt(tot.total-tot.pre)}</td><td>${fmt(tot.pre)}</td><td></td><td></td><td></td></tr></tfoot>`;
+  // weekly table
+  const ts=document.getElementById('tbl-sem');
+  const hl=p=>sel===p?' class="hl"':'';
+  ts.innerHTML=`<thead><tr><th>Semana del</th>${DATA.progs.map(p=>`<th${hl(p)}>${p}</th>`).join('')}<th>Total</th></tr></thead>
+  <tbody>${weeks.map(w=>`<tr><td>${fmtDay(w.start)}${w.days<7?' <span class="hint">(en curso)</span>':''}</td>${DATA.progs.map(p=>`<td${hl(p)}>${fmt(w[p])}</td>`).join('')}<td><b>${fmt(w.total)}</b></td></tr>`).join('')}</tbody>
+  <tfoot><tr><td>Total</td>${DATA.progs.map(p=>`<td${hl(p)}>${fmt(DATA.meta[p].reduce((a,b)=>a+b,0))}</td>`).join('')}<td>${fmt(DATA.progs.reduce((a,p)=>a+DATA.meta[p].reduce((x,y)=>x+y,0),0))}</td></tr></tfoot>`;
+}
+
+function renderAll(){
+  const {meta,pre}=series();
+  const tm=meta.reduce((a,b)=>a+b,0), tp=pre.reduce((a,b)=>a+b,0);
+  document.getElementById('t-meta').textContent=fmt(tm);
+  document.getElementById('t-hs').innerHTML=fmt(tm)+'<small>100 %</small>';
+  document.getElementById('t-pre').textContent=fmt(tp);
+  document.getElementById('verdict-big').innerHTML = sel==='ALL' ? 'Sí. <em>'+fmt(tm)+' de '+fmt(tm)+'</em> leads con datos están en HubSpot.' : 'Sí. <em>'+fmt(tm)+' de '+fmt(tm)+'</em> leads de '+PROG_NAMES[sel]+' están en HubSpot.';
+  document.getElementById('t-sin').textContent = sel==='ALL'||sel==='DII' ? fmt(DATA.sin_datos) : '0';
+  renderMes(); renderTend(); renderDetail(); syncFilterUI();
+}
+renderAll();
+</script>
+
+</body>
+</html>
